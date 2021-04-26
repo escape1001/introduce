@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+ <head>
+  <title>es.c.ape1001</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <style>
+	*{margin:0;padding:0;}
+	body{margin:0;padding:0; font-family:'score400';}
+	li{list-style:none;}
+	a:link,a:visited{text-decoration:none; color:#000; font-family:'score400';}
+	h2{width:1px; height:1px; font-size:1px; line-height:0px; overflow:hidden; position:absolute; left:-9999;}
+	@font-face {
+		font-family:'score400';
+		src: url('font/scdream4.woff');
+	}
+	#wrap{width:100%;}
+	
+	/*####### header #######*/
+	#header{width:100%; height:80px; position:fixed; top:0; z-index:1; transition:background-color 0.5s;}
+	h1{width:60px; height:45px; position:absolute; left:30px; bottom:10px; cursor:pointer;}
+	h1 img{width:100%;}
+	#pcNav{width:80%; position:absolute; right:20px; bottom:10px; text-align:right;}
+	#pcNav li{display:inline-block; padding:0 20px; font-size:24px;}
+	#pcNav li a{transition:color 0.2s;}
+	#pcNav li a:hover,#header li a:focus{color:#fc0; outline:none;}
+	#pcNav .selected a{color:#fc0;}
+	#mobNav{display:none;}
+
+	/*####### container #######*/
+	#container{width:100%;}
+	
+	/*####### greet #######*/
+	#greet_area{width:100%; height:960px; background:url('img/back.jpg') no-repeat #fff; background-size:cover; background-attachment:fixed;}
+	#greet{width:100%; height:100%;
+		backdrop-filter:blur(10px) brightness(110%);
+		-webkit-backdrop-filter:blur(10px) brightness(110%); background-color:rgba(255,255,255,0.5);
+		text-align:center;
+		position:relative;
+	}
+	#greet .textBox{font-size:60px; position:absolute; left:50%; top:50%; transform:translate(-50%,-60%);}
+	#greet .textBox span{font-size:75px;
+		animation:textGra 4s infinite alternate;
+		background:linear-gradient(40deg, #c41cb7, #5673bc, #1217b1);
+		background-size:400% 400%;
+		-webkit-background-clip:text; -webkit-text-fill-color:transparent;
+	}
+	@keyframes textGra{
+		0%{background-position:0 0;}
+		50%{background-position:50% 100%;}
+		100%{background-position:100% 50%;}
+	}
+	#greet .btn{display:inline-block; position:absolute; left:50%; top:90%; transform:translatex(-50%);}
+	#greet .btn a{display:block; padding:10px 20px; color:#fff; text-shadow:0 0 15px rgba(0,0,0,0.7);}
+	#greet .btn span{display:inline-block; transform:rotate(180deg); animation:arrow 1s infinite alternate;}
+	@keyframes arrow{
+		0%{transform:rotate(180deg) translatey(0);}
+		100%{transform:rotate(180deg) translatey(5px);}
+	}
+	
+	/*####### about #######*/
+	#about_area{width:100%; padding:100px 0;}
+	#about{width:1025px; margin:0 auto;}
+	#about .textBox{width:60%; padding-top:80px; font-size:14px; float:left;}
+	#about .textBox b{display:block; padding-bottom:20px; font-size:18px;}
+	#about .imgBox{width:40%; height:400px; float:left; overflow:hidden;}
+	#about .imgBox .film{width:400%; height:100%; animation:sw 25s infinite ease-in-out;}
+	@keyframes sw{
+		0%{margin-left:0;}
+		30%{margin-left:0;}
+		33%{margin-left:-100%;}
+		63%{margin-left:-100%;}
+		66%{margin-left:-200%;}
+		96%{margin-left:-200%;}
+		100%{margin-left:-300%;}
+	}
+	#about .imgBox .film img{width:25%; vertical-align:top;}
+	#about .imgBox .film img:nth-child(1){transform:translatey(-20%);}
+	#about .imgBox .film img:nth-child(2){transform:translatey(-22%);}
+	#about .imgBox .film img:nth-child(3){transform:translatey(-25%);}
+	#about .imgBox .film img:nth-child(4){transform:translatey(-20%);}
+
+	#about:after{content:""; display:block; clear:both;}
+	
+	/*####### about_more #######*/
+	#about_more_area{width:100%; padding:100px 0; background-color:#f5f6f9; font-size:14px;}
+	#career,#study,#skill{width:1025px; margin:0 auto;}
+	#about_more_area h3{width:15%; height:100%; margin-right:5%; padding:10px 0; float:left; color:#324099; border-top:1px solid #324099; letter-spacing:3px; text-indent:5px; font-size:18px;}
+	#about_more_area .desc{width:80%; padding:10px 0; float:left; border-top:1px solid #777;}
+	
+	#career dl{width:100%;}
+	#career dt{width:100%; padding-bottom:10px; cursor:pointer; transition:color 0.4s;}
+	#career dt:hover{color:#324099;}
+	#career dt.c2{padding-top:10px;}
+	#career dt span{display:inline-block; transform:rotate(-90deg); transition:transform 0.2s;}
+	#career dt.c2 span{transform:rotate(0deg);}
+	#career dt b{padding-right:20px;}
+	#career dd{padding-left:20px; padding-bottom:5px;}
+	#career dd.c1{display:none;}
+	#career dd b{padding-right:10px;}
+	#career dd i{font-style:normal; padding-left:15px; color:#999;}
+
+	#study{padding-top:50px;}
+	#study p{width:100%; padding-bottom:10px;}
+	#study p b{display:inline-block; width:200px;}
+	#study p span{display:inline-block; width:520px;}
+
+	#skill{padding-top:50px;}
+	#skill h3{border:none;}
+	#skill .desc{border:none;}
+	#skill .desc dl{width:100%; padding:10px 0; border-bottom:1px solid #838ed5;}
+	#skill .desc dl:first-child{padding:0; padding-bottom:10px;}
+	#skill .desc dt{display:inline-block; margin-right:50px; background-color:#838ed5; color:#f5f6f9; padding:5px 10px; border-radius:20px;}
+	#skill .desc dd{display:inline-block; margin-right:30px;}
+	#skill .desc dd a:hover,#skill .desc dd a:focus{color:#fa0; outline:none;}
+
+	#skill .desc .last{width:90%; padding:10px 0; padding-left:15%; display:none; color:#324099; font-size:12px;}
+
+	#career:after{content:""; display:block; clear:both;}
+	#study:after{content:""; display:block; clear:both;}
+	#skill:after{content:""; display:block; clear:both;}
+	#about_more_area:after{content:""; display:block; clear:both;}
+
+	/*####### port #######*/
+	#port{width:100%; text-align:center; padding:100px 0;}
+	#port h3{font-size:40px; padding-bottom:80px; text-transform:uppercase;}
+	#cheese{width:100%; height:500px;}
+	#cheese .imgBox{width:50%; height:100%; overflow:hidden; float:left;}
+	#cheese .imgBox video{width:100%;}
+	#cheese .textBox{width:45%; padding-left:5%; height:100%; float:left; text-align:left;}
+	#cheese .textBox h4{font-size:24px; padding-bottom:20px;}
+	#cheese .textBox .subText{color:#777; padding:20% 0 20px;}
+	#cheese .textBox .btn{padding-top:20px;}
+	#cheese .textBox .btn a{display:inline-block; width:150px; height:40px; line-height:40px; margin:0 20px; text-align:center; border-radius:20px; background-color:#838ed5; color:#fff; transition:background-color 0.4s;}
+	#cheese .textBox .btn a:hover,#cheese .textBox .btn a:focus{background-color:#324099; outline:none;}
+
+	/*####### footer #######*/
+	#footer{width:100%;}
+	#contact_area{width:100%; background-color:#324099;}
+	#contact{width:1025px; padding:70px 0; margin:0 auto;}
+	#contact p{width:50%; float:left; color:rgba(255,255,255,0.5); font-size:24px;}
+	#contact p em{font-style:normal; color:#fff; padding:0 10px; font-size:26px;}
+	#contact .btn{text-align:center; line-height:103px;}
+	#contact .btn a{display:inline-block; width:200px; height:50px; line-height:50px; text-align:center; border-radius:3px; font-size:20px; background-color:#fff; color:#324099; transition:all 0.4s;}
+	#contact .btn a:hover,#contact .btn a:focus{background-color:rgba(255,255,255,0.3); color:#fff; outline:none;}
+
+	#contact:after{content:""; display:block; clear:both;}
+
+	#footer_info_area{width:100%; background-color:#efefef;}
+	#footer_info{width:1025px; margin:0 auto; padding:60px 0 40px; text-align:center;}
+	#footer_info img{width:70px;}
+	#footer_info p{width:100%; padding-top:20px;}
+
+	/*미디어쿼리*/
+	@media all and (min-width:320px) and (max-width:480px){
+		/*header*/
+		#header{height:50px;}
+		h1{width:40px; height:40px; left:20px; bottom:5px;}
+
+		#pcNav{display:none;}
+		#mobNav{display:block;}
+		#mobNav .btn{width:24px; height:20px; position:absolute; right:20px; top:15px; z-index:1;}
+		#mobNav .btn span{display:inline-block; width:100%; height:2px; background-color:#324099; position:absolute; left:0; top:0; transition:all 0.5s;}
+		#mobNav .btn span:nth-child(2){top:50%; transform:translatey(-1px);}
+		#mobNav .btn span:nth-child(3){top:auto; bottom:0;}
+
+		#mobNav ul{position:fixed; width:40%; height:90%; padding-top:20%; right:0; top:0; background-color:rgba(255,255,255,0.9);
+		backdrop-filter:blur(5px);
+		-webkit-backdrop-filter:blur(5px);
+		text-align:right; line-height:50px; transform:translatex(100%); transition:all 0.4s;}
+		#mobNav li{position:inline-block; padding-right:20px;}
+		#mobNav .selected a{color:#fc0;}
+
+
+		/*greet*/
+		#greet_area{height:600px;}
+		#greet .textBox{font-size:26px;}
+		#greet .textBox span{font-size:50px;}
+
+		/*about*/
+		#about{width:90%; padding-bottom:240px; position:relative;}
+		#about .textBox{width:100%; padding-top:0; float:none;}
+		#about .imgBox{width:200px; height:200px; margin-top:20px; float:none; position:absolute; bottom:0; right:0;}
+
+		/*about_more*/
+		#career,#study,#skill{width:90%;}
+		#about_more_area h3{width:100%; height:auto; margin-right:0; padding:10px 0; float:none; text-indent:0; font-size:18px; border:none;}
+		#about_more_area .desc{width:100%; padding:10px 0; float:none; border-top:1px solid #777;}
+
+		#career dd{padding-bottom:10px;}
+		#career dd i{display:block; padding-left:12%;}
+
+		#study{padding-top:50px;}
+		#study p{width:100%; padding-bottom:24px; color:#838ed5;}
+		#study p b{display:block; width:100%; color:#000;}
+		#study p span{display:block; width:100%; padding:10px 0 5px; color:#000;}
+
+		#skill .desc dt{display:block; width:100px; margin-right:0; margin-bottom:10px; padding:5px 0; text-align:center;}
+		#skill .desc dd{margin:0 10px 10px 10px;}
+		#skill .desc .last{width:100%; margin:0; padding:10px 0; line-height:20px;}
+		
+		/*port*/
+		#port h3{font-size:30px; padding-bottom:50px;}
+		#cheese{height:auto;}
+		#cheese .imgBox{width:100%; height:auto; float:none;}
+		#cheese .textBox{width:90%; margin:0 auto; height:auto; float:none; padding:20px 0 0; text-align:center;}
+		#cheese .textBox .btn a{display:inline-block; width:150px; height:40px; line-height:40px; margin:0; margin-bottom:15px;}
+
+		/*footer*/
+		#contact{width:100%; margin:0; padding:30px 0;}
+		#contact p{width:270px; margin:0 auto; float:none; font-size:14px;}
+		#contact p em{font-style:normal; color:#fff; padding:0; font-size:16px;}
+		#contact .btn{line-height:40px; padding-top:20px;}
+		#contact .btn a{width:150px; height:40px; line-height:40px; font-size:18px;}
+
+		#footer_info{width:90%;}
+		#footer_info p{font-size:14px; padding-top:10px;}
+	}
+  </style>
+  <script>
+	$(document).ready(function(){
+		/*h1클릭시 맨 위*/
+		$("h1").click(function(){
+			$("html, body").stop().animate({"scrollTop":"0"},1000,'swing');
+		});
+
+		/*greeting 높이*/
+		$("#greet_area").css({"height":$(window).height()});
+
+		/*greeting 버튼*/
+		$("#greet_area a").on("click focus", function(){
+			$("html, body").stop().animate({"scrollTop":$(window).height()},2000,'swing');
+		});
+
+		/*스크롤시 네비 컬러*/
+		$(window).scroll(function(){
+			var scrollT = window.scrollY;
+			var aboutT = $("#about_area").offset().top-100;
+			var portT = $("#port").offset().top-100;
+			var contactT = $("body").height()-($("body").height()%$(window).height())-$("#footer").height();
+			//console.log(scrollT);
+			//console.log(contactT);
+
+			if(scrollT<=aboutT){
+				$("#header").css({"background":"none"});
+				$("#pcNav li,#mobNav ul li").removeClass();
+				$("#pcNav li:eq(0),#mobNav ul li:eq(0)").addClass("selected");
+			}
+			else if(scrollT>aboutT && scrollT<=portT){
+				$("#header").css({"backgroundColor":"#fff"});
+				$("#pcNav li,#mobNav ul li").removeClass();
+				$("#pcNav li:eq(1),#mobNav ul li:eq(1)").addClass("selected");
+			}
+			else if(scrollT>portT && scrollT<=contactT){
+				$("#header").css({"backgroundColor":"#fff"});
+				$("#pcNav li,#mobNav ul li").removeClass();
+				$("#pcNav li:eq(2),#mobNav ul li:eq(2)").addClass("selected");
+			}
+			else if(scrollT>contactT){
+				$("#header").css({"backgroundColor":"#fff"});
+				$("#pcNav li,#mobNav ul li").removeClass();
+				$("#pcNav li:eq(3),#mobNav ul li:eq(3)").addClass("selected");
+			}
+		});
+
+		/*모바일네비*/
+		var navOnf = true;
+		$("#mobNav .btn").click(function(){
+			if(navOnf==true){
+				$(this).children("span:eq(0)").css({"top":"50%","transform":"rotate(45deg)"});
+				$(this).children("span:eq(1)").css({"opacity":"0"});
+				$(this).children("span:eq(2)").css({"bottom":"50%","transform":"translatey(2px) rotate(-45deg)"});
+
+				$("#mobNav ul").css({"transform":"translatex(0)","boxShadow":"0 0 10px rgba(0,0,0,0.5)"});
+
+				navOnf=false;
+			}
+			else{
+				$(this).children("span:eq(0)").css({"top":"0","transform":"rotate(0deg)"});
+				$(this).children("span:eq(1)").css({"opacity":"1"});
+				$(this).children("span:eq(2)").css({"bottom":"0","transform":"translatey(0) rotate(0deg)"});
+
+				$("#mobNav ul").css({"transform":"translatex(100%)","boxShadow":"0 0 10px rgba(0,0,0,0)"});
+
+				navOnf=true;
+			}			
+		});
+
+		$("#mobNav").mouseleave(function(){
+			navOnf=false;
+			$("#mobNav .btn").click();
+		});
+
+		$("#mobNav li a").click(function(){
+			$("#mobNav .btn").click();
+			$("#mobNav li").removeClass();
+			$(this).parent().addClass("selected");
+		});
+
+		/*경력사항 클릭 아코디언*/
+		$("#career dt").click(function(){
+			$("#career dd."+$(this).attr('class')).stop().fadeToggle();
+			console.log($(this).attr("class").indexOf('s'));
+			
+			var careerOnf = $(this).next().attr("class").indexOf('s');
+
+			if(careerOnf==-1){
+				$(this).find("span").css({"transform":"rotate(0deg)"});
+				$(this).next().addClass("selected");
+			}
+			else{
+				$(this).find("span").css({"transform":"rotate(-90deg)"});
+				$(this).next().removeClass("selected");
+			}
+		});
+
+		/*스킬 클릭 설명글*/
+		$("#skill .desc dd a").click(function(){
+			var here = $(this).parent().parent().index();
+			var detail = $(this).attr("href").substring(1);
+			//console.log(here);
+			
+			$.ajax({
+				url:"data/skill.xml",
+				data:"get",
+				dataType:"xml",
+				success:function(data){
+					var list = $(data).find(detail).html();
+					//console.log(list);
+
+					$("#skill dl:eq("+here+") .last").html(list);
+				},error:function(){
+					alert("error!");
+				}
+			});
+			
+
+			$(this).parent().parent().find(".last").stop().slideDown();
+		});
+	});
+
+	/*클립보드 복사*/
+		function copymail(mail){
+			var dummy = document.createElement("textarea");
+			document.body.appendChild(dummy);
+			dummy.value = mail;
+			dummy.select();
+			document.execCommand("copy");
+			document.body.removeChild(dummy);
+			alert('메일주소가 클립보드에 복사되었습니다.');
+		}
+  </script>
+ </head>
+ <body>
+	<div id="wrap">
+		<header id="header">
+			<h1>
+				<img src="img/logo.png" alt="es.c"/>
+			</h1>
+			<ul id="pcNav">
+				<li class="selected">
+					<a href="#" title="HOME">HOME</a>
+				</li>
+				<li>
+					<a href="#about_area" title="ABOUT">ABOUT</a>
+				</li>
+				<li>
+					<a href="#port" title="PORTFOLIO">PORTFOLIO</a>
+				</li>
+				<li>
+					<a href="#contact" title="CONTACT">CONTACT</a>
+				</li>
+			</ul>
+			<nav id="mobNav">
+				<p class="btn">
+					<span></span>
+					<span></span>
+					<span></span>
+				</p>
+				<ul>
+					<li class="selected">
+						<a href="#" title="HOME">HOME</a>
+					</li>
+					<li>
+						<a href="#about_area" title="ABOUT">ABOUT</a>
+					</li>
+					<li>
+						<a href="#port" title="PORTFOLIO">PORTFOLIO</a>
+					</li>
+					<li>
+						<a href="#contact" title="CONTACT">CONTACT</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+		<div id="container">
+			<div id="greet_area">
+				<h2>메인페이지 - 인사</h2>
+				<div id="greet">
+					<p class="textBox">
+						<strong>
+							안녕하세요!<br/>
+							과정을 즐기는 개발자<br/>
+							<span>ES.C 입니다.</span>
+						</strong>
+					</p>
+					<p class="btn">
+						<a href="#none" title="ABOUT"><span>＾</span> Scroll more</a>
+					</p>
+				</div>
+			</div>
+			<section id="about_area">
+				<h2>about me</h2>
+				<div id="about">
+					<p class="textBox">
+						<b>To Infinity and Beyond!</b>
+						영상디자인을 전공하고 대학로에서 9년간 프리랜서 영상 디자이너로 일했어요.<br/>
+						주로 중-소극장 공연의 SNS를 관리하고 영상 컨텐츠를 기획, 제작하며<br/>
+						객석과 무대 사이의 즐거움을 더했습니다.<br/><br/>
+
+						코로나19로 공연업계가 어려워지며 일이 점점 줄자<br/>
+						엎어진 김에 동전을 줍겠다는 각오로 웹개발로의 전향을 결심했습니다.<br/>
+						6개월간 결석 제로! 지각 제로! 100%의 꽉 찬 수강률로 성실성을 증명하며<br/>
+						학습을 이어나간 결과, 종강일에는 우수 학생으로 선정되었어요.<br/><br/>
+
+						최후의 순간에도 언제나 길은 있다고 생각해요.
+					</p>
+					<div class="imgBox">
+						<div class="film">
+							<img src="img/m0.jpg" alt="es.c_pic0"/><img src="img/m1.jpg" alt="es.c_pic1"/><img src="img/m2.jpg" alt="es.c_pic2"/><img src="img/m0.jpg" alt="es.c_pic0"/>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="about_more_area">
+				<h2>상세정보</h2>
+				<div id="career">
+					<h3>경력사항</h3>
+					<div class="desc">
+						<dl>
+							<dt class="c1"><span>▼</span> <b>2018 ~ 2019</b> AFC / 박호준헤어 미디어실장</dt>
+							<dd class="c1">
+								<b>AFC</b>06~12회 대회 VCR, 인쇄물 제작
+							</dd>
+							<dd class="c1">
+								<b>AFC</b>06~12회 대회 기사 송출 및 대회 운영
+							</dd>
+							<dd class="c1">
+								<b>박호준헤어</b> 가맹점 홍보물 인쇄 제작
+							</dd>
+							<dt class="c2"><span>▼</span> <b>2011 ~ 2019</b> 프리랜서 영상디자이너</dt>
+							<dd class="c2 selected">
+								<b>2011~2015</b>뮤지컬 토크쇼 &lt;이야기쇼&gt; 시즌2<i>온라인 영상 제작</i>
+							</dd>
+							<dd class="c2">
+								<b>2015</b>뮤지컬 웹예능 &lt;배우수업&gt;<i>종편</i>
+							</dd>
+							<dd class="c2">
+								<b>2016</b>뮤지컬 &lt;신과 함께 가라&gt; <i>온라인 홍보 (SNS채널 운영 및 영상 콘텐츠 제작)</i>
+							</dd>
+							<dd class="c2">
+								<b>2016</b>뮤지컬 &lt;알타보이즈&gt;<i>온라인 홍보 (SNS채널 운영 및 영상 콘텐츠 제작)</i>
+							</dd>
+							<dd class="c2">
+								<b>2016</b>자라섬 뮤지컬 페스티벌 &lt;이야기쇼 with 자라섬&gt;<i>공연 VCR 제작</i>
+							</dd>
+							<dd class="c2">
+								<b>2017</b>연극 &lt;남자충동&gt;, &lt;미친키스&gt;<i>온라인 홍보 (SNS채널 운영 및 영상 콘텐츠 제작)</i>
+							</dd>
+							<dd class="c2">
+								<b>2017</b>뮤지컬 갈라콘서트 &lt;Reply&gt;<i>공연 VCR 제작</i>
+							</dd>
+							<dd class="c2">
+								<b>2017</b>더뮤지컬 페스티벌 &lt;뮤지컬 육상선수권 대회&gt;<i>공연 VCR 제작</i>
+							</dd>
+							<dd class="c2">
+								<b>2017</b>뮤지컬 &lt;틱틱붐&gt;<i>온라인 홍보 (SNS채널 운영 및 영상 콘텐츠 제작)</i>
+							</dd>
+							<dd class="c2">
+								<b>2017</b>뮤지컬 &lt;줄리 앤 폴&gt;<i>온라인 홍보 (SNS채널 운영 및 영상 콘텐츠 제작)</i>
+							</dd>
+							<dd class="c2">
+								<b>2018</b>뮤지컬 콘서트 &lt;택스티발&gt;<i>공연 VCR 제작</i>
+							</dd>
+							<dd class="c2">
+								<b>2019</b>연극 &lt;머더 미스터리&gt;<i>웹 콘텐츠 제작 (영상, 카드뉴스)</i>
+							</dd>
+							<dd class="c2">
+								<b>2019</b>연극 &lt;생쥐와 인간&gt;<i>웹 콘텐츠 제작 (영상, 카드뉴스)</i>
+							</dd>
+						</dl>
+					</div>
+				</div>
+				<div id="study">
+					<h3>교육사항</h3>
+					<div class="desc">
+						<p>
+							<b>2020 10월 ~ 2021 4월</b><span>그린컴퓨터 아카데미 UI/UX디자인 웹퍼블리셔&프론트엔드 개발자 양성과정</span>수료
+						</p>
+						<p>
+							<b>2011 ~ 2016</b><span>계원예술대학교 영상디자인과</span>졸업
+						</p>
+						<p>
+							<b>2008 ~ 2010</b><span>서울영상고등학교 애니메이션과</span>중퇴
+						</p>
+					</div>
+				</div>
+				<div id="skill">
+					<h3>직무능력사항</h3>
+					<div class="desc">
+						<dl class="web">
+							<dt>WEB</dt>
+							<dd><a href="#html" title="html">HTML</a></dd>
+							<dd><a href="#css" title="css">CSS</a></dd>
+							<dd><a href="#javascript" title="javascript">javascript</a></dd>
+							<dd><a href="#jQuery" title="jQuery">jQuery</a></dd>
+							<dd><a href="#php" title="php">PHP</a></dd>
+							<dd><a href="#MySQL" title="MySQL">MySQL</a></dd>
+							<dd class="last">* 상세설명 어쩌구</dd>
+						</dl>
+						<dl class="adobe">
+							<dt>Adobe Tools</dt>
+							<dd><a href="#ps" title="photoshop">Photoshop</a></dd>
+							<dd><a href="#ai" title="illustrator">Illustrator</a></dd>
+							<dd><a href="#pr" title="premiere_pro">Premiere Pro</a></dd>
+							<dd><a href="#ae" title="after_effect">After Effect</a></dd>
+							<dd><a href="#xd" title="xd">XD</a></dd>
+							<dd class="last">* 상세설명 어쩌구</dd>
+						</dl>
+						<dl class="ms">
+							<dt>MS Office</dt>
+							<dd><a href="#word" title="word">Word</a></dd>
+							<dd><a href="#excel" title="excel">Excel</a></dd>
+							<dd><a href="#powerpoint" title="powerpoint">Power Point</a></dd>
+							<dd class="last">* 상세설명 어쩌구</dd>
+						</dl>
+					</div>
+				</div>
+			</section>
+			<section id="port">
+				<h3>Portfolio</h3>
+				<div id="cheese">
+					<div class="imgBox">
+						<video autoplay muted loop>
+							<source src="vid/cheese_index.mp4" type="video/mp4"/>
+						</video>
+					</div>
+					<div class="textBox">
+						<h4>치즈퀸 리뉴얼 프로젝트</h4>
+						<p>
+							국내 치즈 쇼핑몰인 치즈퀸의 웹사이트를 리뉴얼해보았어요.<br/>
+							테이블코딩으로 구성된 기존의 홈페이지를 시멘틱태그를 이용해<br/>
+							웹표준에 맞게 마크업했습니다.
+						</p>
+						<p class="subText">
+							사용 스킬<br/>
+							HTML5 / CSS3 / javascript / jQuery / PHP / mySQL
+						</p>
+						<p class="btn">
+							<a href="http://escape1001.dothome.co.kr/cheesequeen/index.php" title="link" target="_blank">사이트 더 보기</a>
+							<a href="data/cheese_desc.pdf" title="기술상세서" target="_blank">기술상세서</a>
+						</p>
+					</div>
+				</div>
+			</section>
+		</div>
+		<footer id="footer">
+			<section id="contact_area">
+				<h2>contact</h2>
+				<div id="contact">
+					<p>
+						if(you.want==moreInfo){<br/>
+						 &nbsp;&nbsp;email(<em>es.c.ape1001@hanmail.net</em>);<br/>
+						}
+					</p>
+					<p class="btn">
+						<a href="#none" title="클립보드에 주소 복사" onclick="copymail('es.c.ape1001@hanmail.net');">copy</a>
+					</p>
+				</div>
+			</section>
+			<div id="footer_info_area">
+				<div id="footer_info">
+					<img src="img/logo.png" alt="es.c"/>
+					<p>
+						Copyright &copy; 2021 by ES.C.APE1001 All Right reserved
+					</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+ </body>
+</html>
