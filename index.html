@@ -39,8 +39,16 @@
 		text-align:center;
 		position:relative;
 	}
-	#greet .textBox{font-size:60px; position:absolute; left:50%; top:50%; transform:translate(-50%,-60%); word-break:keep-all;}
-	#greet .textBox span{font-size:75px;
+	#greet .textBox{position:absolute; left:50%; top:50%; transform:translate(-50%,-60%); word-break:keep-all;  line-height:80px;}
+	#greet .textBox .text{display:inline-block;
+		width:400px; height:50px; line-height:50px; font-size:30px; border:5px solid #314098; background-color:rgba(255,255,255,0.6);
+		/*border-image:linear-gradient(40deg, #c41cb7, #5673bc, #1217b1);
+		border-image-slice:1;*/
+		overflow:hidden;
+	}
+	#greet .textBox b{font-size:40px; letter-spacing:2px;}
+	#greet .textBox i{font-style:normal; display:none;}
+	#greet .textBox span{font-size:80px;
 		animation:textGra 4s infinite alternate;
 		background:linear-gradient(40deg, #c41cb7, #5673bc, #1217b1);
 		background-size:400% 400%;
@@ -62,9 +70,9 @@
 	/*####### about #######*/
 	#about_area{width:100%; padding:100px 0;}
 	#about{width:1025px; margin:0 auto;}
-	#about .textBox{width:40%; padding-top:80px;  padding-right:20%; font-size:14px; float:left; word-break:keep-all;}
+	#about .textBox{width:40%; padding-top:80px;  padding-right:20%; font-size:14px; float:left; word-break:keep-all; opacity:0; transition:all 1s ease-out 0.2s;}
 	#about .textBox b{display:block; padding-bottom:20px; font-size:18px;}
-	#about .imgBox{width:40%; height:400px; float:left; overflow:hidden;}
+	#about .imgBox{width:40%; height:400px; float:left; overflow:hidden; transform:translatex(100px); opacity:0; transition:all 1s ease-out 0.2s;}
 	#about .imgBox .film{width:400%; height:100%; animation:sw 25s infinite ease-in-out;}
 	@keyframes sw{
 		0%{margin-left:0;}
@@ -91,13 +99,10 @@
 	
 	#career dl{width:100%;}
 	#career dt{width:100%; padding-bottom:10px; cursor:pointer; transition:color 0.4s;}
-	#career dt:hover{color:#324099;}
 	#career dt.c2{padding-top:10px;}
 	#career dt span{display:inline-block; transform:rotate(-90deg); transition:transform 0.2s;}
-	#career dt.c2 span{transform:rotate(0deg);}
 	#career dt b{padding-right:20px;}
-	#career dd{padding-left:20px; padding-bottom:5px; word-break:keep-all;}
-	#career dd.c1{display:none;}
+	#career dd{padding-left:20px; padding-bottom:5px; word-break:keep-all; display:none;}
 	#career dd b{padding-right:10px;}
 	#career dd i{font-style:normal; padding-left:15px; color:#999;}
 
@@ -179,7 +184,7 @@
 		#greet .textBox span{font-size:50px;}
 
 		/*about*/
-		#about{width:90%; padding-bottom:240px; position:relative;}
+		#about{width:90%; padding-bottom:240px; position:relative; overflow:hidden;}
 		#about .textBox{width:100%; padding-top:0; float:none;}
 		#about .imgBox{width:200px; height:200px; margin-top:20px; float:none; position:absolute; bottom:0; right:0;}
 
@@ -227,41 +232,95 @@
 
 		/*greeting 높이*/
 		$("#greet_area").css({"height":$(window).height()});
+		
+		/*greeting 멘트변화*/
+		var greetOnf = 0;
+		function greetT(){
+			$("#greet .text i").slideDown(500).delay(4000).slideUp(500,function(){
+				if(greetOnf==0){
+					$("#greet .text").html("<i>영상 디자이너에서 개발자로</i>");
+					greetOnf = 1;
+				}
+				else if(greetOnf==1){
+					$("#greet .text").html("<i>배움 있는 일터를 찾고 있는</i>");
+					greetOnf = 2;
+				}
+				else if(greetOnf==2){
+					$("#greet .text").html("<i>여행과 피자를 좋아하는</i>");
+					greetOnf = 3;
+				}
+				else if(greetOnf==3){
+					$("#greet .text").html("<i>과정을 즐기는 개발자</i>");
+					greetOnf = 0;
+				}
+			});
+		}
+		greetT();
+		setInterval(greetT,500);		
 
 		/*greeting 버튼*/
-		$("#greet_area a").on("click focus", function(){
-			$("html, body").stop().animate({"scrollTop":$(window).height()},2000,'swing');
+		$("#greet a").on("click focus", function(){
+			$("html, body").stop().animate({"scrollTop":$(window).height()},1000,'swing');
 		});
 
-		/*스크롤시 네비 컬러*/
-		$(window).scroll(function(){
-			var scrollT = window.scrollY;
-			var aboutT = $("#about_area").offset().top-100;
-			var portT = $("#port").offset().top-100;
-			var contactT = $("body").height()-($("body").height()%$(window).height())*2;
-			//console.log(scrollT);
-			//console.log(contactT);
+		/*스크롤시 네비 컬러, 구역별 리액션*/
+		var scrollT = window.scrollY;
+		var aboutT = $("#about_area").offset().top-100;
+		var portT = $("#port").offset().top-100;
+		var contactT = $(document).height()-$(window).height();
 
+		function navAction(){
 			if(scrollT<=aboutT){
 				$("#header").css({"background":"none"});
 				$("#pcNav li,#mobNav ul li").removeClass();
 				$("#pcNav li:eq(0),#mobNav ul li:eq(0)").addClass("selected");
-			}
+			}			
 			else if(scrollT>aboutT && scrollT<=portT){
 				$("#header").css({"backgroundColor":"#fff"});
 				$("#pcNav li,#mobNav ul li").removeClass();
-				$("#pcNav li:eq(1),#mobNav ul li:eq(1)").addClass("selected");
+				$("#pcNav li:eq(1),#mobNav ul li:eq(1)").addClass("selected");			
+
+				/*$("#about .textBox").css({"opacity":"1"});
+				$("#about .imgBox").css({"transform":"translatex(0)","opacity":"1"});
+
+				if(scrollT>aboutT+$("#about").height()/2){
+					if($("#career dt.c2").next().attr("class").indexOf("s")==-1){
+						$("#career dt.c2").click();
+					}				
+				}*/
 			}
-			else if(scrollT>portT && scrollT<=contactT){
+			else if(scrollT>portT && scrollT<contactT){
 				$("#header").css({"backgroundColor":"#fff"});
 				$("#pcNav li,#mobNav ul li").removeClass();
 				$("#pcNav li:eq(2),#mobNav ul li:eq(2)").addClass("selected");
 			}
-			else if(scrollT>contactT){
+			else if(scrollT>=contactT){
 				$("#header").css({"backgroundColor":"#fff"});
 				$("#pcNav li,#mobNav ul li").removeClass();
 				$("#pcNav li:eq(3),#mobNav ul li:eq(3)").addClass("selected");
 			}
+		}
+
+		function scrollAction(){
+			if(scrollT>$("#greet_area").height()/4){
+				$("#about .textBox").css({"opacity":"1"});
+				$("#about .imgBox").css({"transform":"translatex(0)","opacity":"1"});
+			}
+
+			if(scrollT>aboutT){
+				if($("#career dt.c2").next().attr("class").indexOf("s")==-1){
+					$("#career dt.c2").click();
+				}				
+			}
+		}
+
+		$(window).scroll(function(){	
+			scrollT=window.scrollY;
+			console.log("scroll : "+scrollT);
+			//console.log(aboutT);
+
+			navAction();
+			scrollAction();
 		});
 
 		/*모바일네비*/
@@ -299,7 +358,18 @@
 		});
 
 		/*경력사항 클릭 아코디언*/
+		$("#career dt").mouseover(function(){
+			if($(this).next().attr("class").indexOf("s")==-1){
+				$(this).css({"color":"#324099"});
+			}			
+		}).mouseout(function(){
+			if($(this).next().attr("class").indexOf("s")==-1){
+				$(this).css({"color":"#000"});
+			}	
+		});
+
 		$("#career dt").click(function(){
+			$(this).css({"color":"#324099"});
 			$("#career dd."+$(this).attr('class')).stop().fadeToggle();
 			console.log($(this).attr("class").indexOf('s'));
 			
@@ -400,8 +470,8 @@
 				<div id="greet">
 					<p class="textBox">
 						<strong>
-							안녕하세요!<br/>
-							과정을 즐기는 개발자<br/>
+							<b>안녕하세요!</b><br/>
+							<i class="text"><i>과정을 즐기는 개발자</i></i><br/>
 							<span>ES.C 입니다.</span>
 						</strong>
 					</p>
@@ -447,7 +517,7 @@
 								<b>박호준헤어</b> 가맹점 홍보물 인쇄 제작
 							</dd>
 							<dt class="c2"><span>▼</span> <b>2011 ~ 2019</b> 프리랜서 영상디자이너</dt>
-							<dd class="c2 selected">
+							<dd class="c2">
 								<b>2011~2015</b>뮤지컬 토크쇼 &lt;이야기쇼&gt; 시즌2<i>온라인 영상 제작</i>
 							</dd>
 							<dd class="c2">
