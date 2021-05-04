@@ -32,14 +32,16 @@
 	#container{width:100%;}
 	
 	/*####### greet #######*/
-	#greet_area{width:100%; height:960px; background:url('img/back.jpg') no-repeat #fff; background-size:cover; background-attachment:fixed;}
+	#greet_area{width:100%; height:960px; background:url('img/back.jpg') no-repeat #fff; background-size:cover; background-attachment:fixed; position:relative; overflow:hidden;}
+	#greet_area .particle{position:absolute; left:0; top:0; background-color:#fff; display:none; /*transition:margin 10s ease 10s, opacity 1s ease 9s;*/}
+
 	#greet{width:100%; height:100%;
 		backdrop-filter:blur(10px) brightness(110%);
 		/*-webkit-backdrop-filter:blur(10px) brightness(110%);*/ background-color:rgba(255,255,255,0.5);
 		text-align:center;
 		position:relative;
 	}
-	#greet .textBox{position:absolute; left:50%; top:50%; transform:translate(-50%,-60%); word-break:keep-all;  line-height:80px;}
+	#greet .textBox{position:absolute; left:50%; top:50%; transform:translate(-50%,-60%); word-break:keep-all;  line-height:80px; z-index:1;}
 	#greet .textBox .text{display:inline-block;
 		width:400px; height:50px; line-height:50px; font-size:30px; border:5px solid #314098; background-color:rgba(255,255,255,0.6);
 		/*border-image:linear-gradient(40deg, #c41cb7, #5673bc, #1217b1);
@@ -128,25 +130,26 @@
 	#about_more_area:after{content:""; display:block; clear:both;}
 
 	/*####### port #######*/
-	#port{width:100%; text-align:center; padding:100px 0;}
+	#port{width:100%; text-align:center; padding:100px 0;  overflow:hidden;}
 	#port h3{font-size:40px; padding-bottom:80px; text-transform:uppercase;}
 	#cheese{width:100%; height:500px;}
 	#cheese .imgBox{width:50%; height:100%; overflow:hidden; float:left;}
 	#cheese .imgBox video{width:100%;}
 	#cheese .textBox{width:45%; padding-left:5%; height:100%; float:left; text-align:left; word-break:keep-all;}
-	#cheese .textBox h4{font-size:24px; padding-bottom:20px;}
-	#cheese .textBox .subText{color:#777; padding:20% 0 20px;}
-	#cheese .textBox .btn{padding-top:20px;}
+	#cheese .textBox h4{font-size:24px; padding-bottom:20px; transform:translatex(10%); opacity:0; transition:all 0.5s;}
+	#cheese .textBox p{transform:translatex(10%); opacity:0; transition:all 0.5s ease-out 0.1s;}
+	#cheese .textBox .subText{color:#777; padding:20% 0 20px; transition-delay:0.2s;}
+	#cheese .textBox .btn{padding-top:20px; transition-delay:0.3s;}
 	#cheese .textBox .btn a{display:inline-block; width:150px; height:40px; line-height:40px; margin:0 20px; text-align:center; border-radius:20px; background-color:#838ed5; color:#fff; transition:background-color 0.4s;}
 	#cheese .textBox .btn a:hover,#cheese .textBox .btn a:focus{background-color:#324099; outline:none;}
 
 	/*####### footer #######*/
-	#footer{width:100%;}
+	#footer{width:100%; overflow:hidden;}
 	#contact_area{width:100%; background-color:#324099;}
 	#contact{width:1025px; padding:70px 0; margin:0 auto;}
-	#contact p{width:50%; float:left; color:rgba(255,255,255,0.5); font-size:24px;}
+	#contact p{width:50%; float:left; color:rgba(255,255,255,0.5); font-size:24px; transform:translatex(-10%); opacity:0; transition:all 0.8s;}
 	#contact p em{font-style:normal; color:#fff; padding:0 10px; font-size:26px;}
-	#contact .btn{text-align:center; line-height:103px;}
+	#contact .btn{transform:translatex(10%); text-align:center; line-height:103px;}
 	#contact .btn a{display:inline-block; width:200px; height:50px; line-height:50px; text-align:center; border-radius:3px; font-size:20px; background-color:#fff; color:#324099; transition:all 0.4s;}
 	#contact .btn a:hover,#contact .btn a:focus{background-color:rgba(255,255,255,0.3); color:#fff; outline:none;}
 
@@ -256,7 +259,40 @@
 			});
 		}
 		greetT();
-		setInterval(greetT,500);		
+		setInterval(greetT,500);
+		
+		/*greeting 파티클 마우스 커서 반응*/		
+		var sizes = [10,20,24,36,44];
+		var colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800',
+		'#FF5722', '#795548', '#9E9E9E', '#607D8B', '#777777'
+		];
+		
+		function createParticle(){
+			for(var i=0; i<20; i++){
+				var randomN = Math.round(Math.random()*10)*i;
+				var randomB = Math.round(Math.random()*10)*i;
+				console.log("ran : "+randomN);
+
+				$("#greet_area").append("<p class='particle p"+i+"'></p>");
+
+				$("#greet_area .p"+i).css({"left":randomN+"%","top":randomB+"%","width":sizes[randomN%5],"height":sizes[randomN%5],"borderRadius":sizes[randomN%5]/2,"backgroundColor":colors[randomN],"opacity":"0."+randomB*0.5}).fadeIn(1000);
+			}
+
+			$("#greet_area .particle").animate({"marginTop":"-100%"},10000,function(){
+				$(this).remove();
+			});
+		}		
+		
+		createParticle();
+		setInterval(createParticle,10000);
+
+		$("#greet_area").mousemove(function(a){
+			var cursorX =a.pageX;
+			var cursorY =a.pageY;	
+			console.log("cursorX : "+cursorX+" / cursorY : "+cursorY);
+
+			$("#greet_area .particle").css({"transform":"translate("+cursorX+"%, "+cursorY+"%)"});
+		});
 
 		/*greeting 버튼*/
 		$("#greet a").on("click focus", function(){
@@ -266,7 +302,7 @@
 		/*스크롤시 네비 컬러, 구역별 리액션*/
 		var scrollT = window.scrollY;
 		var aboutT = $("#about_area").offset().top-100;
-		var portT = $("#port").offset().top-100;
+		var portT = $("#port").offset().top;
 		var contactT = $(document).height()-$(window).height();
 
 		function navAction(){
@@ -280,14 +316,6 @@
 				$("#pcNav li,#mobNav ul li").removeClass();
 				$("#pcNav li:eq(1),#mobNav ul li:eq(1)").addClass("selected");			
 
-				/*$("#about .textBox").css({"opacity":"1"});
-				$("#about .imgBox").css({"transform":"translatex(0)","opacity":"1"});
-
-				if(scrollT>aboutT+$("#about").height()/2){
-					if($("#career dt.c2").next().attr("class").indexOf("s")==-1){
-						$("#career dt.c2").click();
-					}				
-				}*/
 			}
 			else if(scrollT>portT && scrollT<contactT){
 				$("#header").css({"backgroundColor":"#fff"});
@@ -312,11 +340,19 @@
 					$("#career dt.c2").click();
 				}				
 			}
+
+			if(scrollT>portT){
+				$("#cheese .textBox h4, #cheese .textBox p").css({"transform":"translatex(0)","opacity":"1"});		
+			}
+
+			if(scrollT>=contactT-$("#footer").height()*0.5){
+				$("#contact p").css({"transform":"translatex(0)","opacity":"1"});	
+			}
 		}
 
 		$(window).scroll(function(){	
 			scrollT=window.scrollY;
-			console.log("scroll : "+scrollT);
+			//console.log("scroll : "+scrollT);
 			//console.log(aboutT);
 
 			navAction();
