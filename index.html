@@ -32,8 +32,7 @@
 	#container{width:100%;}
 	
 	/*####### greet #######*/
-	#greet_area{width:100%; height:960px; background:url('img/back.jpg') no-repeat #fff; background-size:cover; background-attachment:fixed; position:relative; overflow:hidden;}
-	#greet_area .particle{position:absolute; left:0; top:0; background-color:#fff; display:none; /*transition:margin 10s ease 10s, opacity 1s ease 9s;*/}
+	#greet_area{width:100%; height:960px; background:url('img/back.jpg') no-repeat #fff; background-size:cover; background-attachment:fixed; position:relative; overflow:hidden;}	
 
 	#greet{width:100%; height:100%;
 		backdrop-filter:blur(10px) brightness(110%);
@@ -41,7 +40,7 @@
 		text-align:center;
 		position:relative;
 	}
-	#greet .textBox{position:absolute; left:50%; top:50%; transform:translate(-50%,-60%); word-break:keep-all;  line-height:80px; z-index:1;}
+	#greet .textBox{position:absolute; left:50%; top:50%; transform:translate(-50%,-60%); word-break:keep-all;  line-height:80px; z-index:1; opacity:0; transition:opacity 1.5s;}
 	#greet .textBox .text{display:inline-block;
 		width:400px; height:50px; line-height:50px; font-size:30px; border:5px solid #314098; background-color:rgba(255,255,255,0.6);
 		/*border-image:linear-gradient(40deg, #c41cb7, #5673bc, #1217b1);
@@ -49,6 +48,7 @@
 		overflow:hidden;
 	}
 	#greet .textBox b{font-size:40px; letter-spacing:2px;}
+
 	#greet .textBox i{font-style:normal; display:none;}
 	#greet .textBox span{font-size:80px;
 		animation:textGra 4s infinite alternate;
@@ -68,10 +68,20 @@
 		0%{transform:rotate(180deg) translatey(0);}
 		100%{transform:rotate(180deg) translatey(5px);}
 	}
-	
+
+	#particle_wrap div{position:absolute; left:0; top:0;}
+
+	#particle_wrap .particle{animation:particleani 1s infinite alternate;}
+	#particle_wrap div:nth-child(odd) .particle{animation-duration:1.3s;}
+	@keyframes particleani{
+		0%{transform:scale(1);}
+		50%{transform:scale(0.5);}
+		100%{transform:scale(1);}
+	}
+
 	/*####### about #######*/
-	#about_area{width:100%; padding:100px 0;}
-	#about{width:1025px; margin:0 auto;}
+	#about_area{width:100%; padding:100px 0; background-color:#f5f6f9;}
+	#about{width:1025px; margin:0 auto;}	
 	#about .textBox{width:40%; padding-top:80px;  padding-right:20%; font-size:14px; float:left; word-break:keep-all; opacity:0; transition:all 1s ease-out 0.2s;}
 	#about .textBox b{display:block; padding-bottom:20px; font-size:18px;}
 	#about .imgBox{width:40%; height:400px; float:left; overflow:hidden; transform:translatex(100px); opacity:0; transition:all 1s ease-out 0.2s;}
@@ -94,7 +104,7 @@
 	#about:after{content:""; display:block; clear:both;}
 	
 	/*####### about_more #######*/
-	#about_more_area{width:100%; padding:100px 0; background-color:#f5f6f9; font-size:14px;}
+	#about_more_area{width:100%; padding:100px 0;  font-size:14px;}
 	#career,#study,#skill{width:1025px; margin:0 auto;}
 	#about_more_area h3{width:15%; height:100%; margin-right:5%; padding:10px 0; float:left; color:#324099; border-top:1px solid #324099; letter-spacing:3px; text-indent:5px; font-size:18px;}
 	#about_more_area .desc{width:80%; padding:10px 0; float:left; border-top:1px solid #777;}
@@ -130,10 +140,10 @@
 	#about_more_area:after{content:""; display:block; clear:both;}
 
 	/*####### port #######*/
-	#port{width:100%; text-align:center; padding:100px 0;  overflow:hidden;}
-	#port h3{font-size:40px; padding-bottom:80px; text-transform:uppercase;}
+	#port{width:100%; padding:150px 0; overflow:hidden;}
+	#port h3{font-size:40px; text-indent:5%; padding-bottom:80px; text-transform:uppercase; opacity:0; transition:opacity 0.5s;}
 	#cheese{width:100%; height:500px;}
-	#cheese .imgBox{width:50%; height:100%; overflow:hidden; float:left;}
+	#cheese .imgBox{width:50%; height:100%; overflow:hidden; float:left; opacity:0; transition:opacity 0.5s;}
 	#cheese .imgBox video{width:100%;}
 	#cheese .textBox{width:45%; padding-left:5%; height:100%; float:left; text-align:left; word-break:keep-all;}
 	#cheese .textBox h4{font-size:24px; padding-bottom:20px; transform:translatex(10%); opacity:0; transition:all 0.5s;}
@@ -197,7 +207,7 @@
 		#about_more_area .desc{width:100%; padding:10px 0; float:none; border-top:1px solid #777;}
 
 		#career dd{padding-bottom:10px;}
-		#career dd i{display:block; padding-left:12%;}
+		#career dd i{display:block; padding-left:0;}
 
 		#study{padding-top:50px;}
 		#study p{width:100%; padding-bottom:24px; color:#838ed5;}
@@ -228,6 +238,9 @@
   </style>
   <script>
 	$(document).ready(function(){
+		/* 로딩시 greeting 텍스트박스*/
+		$("#greet .textBox").css({"opacity":"1"});
+
 		/*h1클릭시 맨 위*/
 		$("h1").click(function(){
 			$("html, body").stop().animate({"scrollTop":"0"},1000,'swing');
@@ -273,25 +286,27 @@
 				var randomB = Math.round(Math.random()*10)*i;
 				console.log("ran : "+randomN);
 
-				$("#greet_area").append("<p class='particle p"+i+"'></p>");
+				$("#particle_wrap").append("<div class='p"+i+"'><p class='particle'></p></div>");
 
-				$("#greet_area .p"+i).css({"left":randomN+"%","top":randomB+"%","width":sizes[randomN%5],"height":sizes[randomN%5],"borderRadius":sizes[randomN%5]/2,"backgroundColor":colors[randomN],"opacity":"0."+randomB*0.5}).fadeIn(1000);
+				$("#greet_area .p"+i).css({"left":randomN+"%","top":randomB+"%"});
+				
+				$("#greet_area .p"+i+" p").css({"width":sizes[randomN%5],"height":sizes[randomN%5],"borderRadius":sizes[randomN%5]/2,"backgroundColor":colors[randomN%20],"opacity":"0."+randomB*0.5});
 			}
 
-			$("#greet_area .particle").animate({"marginTop":"-100%"},10000,function(){
+			/*$("#greet_area .particle").animate({"marginTop":"-100%"},9000,function(){
 				$(this).remove();
-			});
+			});*/
 		}		
 		
 		createParticle();
-		setInterval(createParticle,10000);
+		//setInterval(createParticle,7000);
 
 		$("#greet_area").mousemove(function(a){
 			var cursorX =a.pageX;
 			var cursorY =a.pageY;	
 			console.log("cursorX : "+cursorX+" / cursorY : "+cursorY);
 
-			$("#greet_area .particle").css({"transform":"translate("+cursorX+"%, "+cursorY+"%)"});
+			$("#particle_wrap div").css({"transform":"translate("+cursorX+"%, "+cursorY+"%)"});
 		});
 
 		/*greeting 버튼*/
@@ -306,18 +321,18 @@
 		var contactT = $(document).height()-$(window).height();
 
 		function navAction(){
-			if(scrollT<=aboutT){
+			if(scrollT<=portT){
 				$("#header").css({"background":"none"});
 				$("#pcNav li,#mobNav ul li").removeClass();
 				$("#pcNav li:eq(0),#mobNav ul li:eq(0)").addClass("selected");
 			}			
-			else if(scrollT>aboutT && scrollT<=portT){
+			else if(scrollT>portT && scrollT<=aboutT){
 				$("#header").css({"backgroundColor":"#fff"});
 				$("#pcNav li,#mobNav ul li").removeClass();
 				$("#pcNav li:eq(1),#mobNav ul li:eq(1)").addClass("selected");			
 
 			}
-			else if(scrollT>portT && scrollT<contactT){
+			else if(scrollT>aboutT && scrollT<contactT){
 				$("#header").css({"backgroundColor":"#fff"});
 				$("#pcNav li,#mobNav ul li").removeClass();
 				$("#pcNav li:eq(2),#mobNav ul li:eq(2)").addClass("selected");
@@ -329,24 +344,36 @@
 			}
 		}
 
-		function scrollAction(){
-			if(scrollT>$("#greet_area").height()/4){
-				$("#about .textBox").css({"opacity":"1"});
+		function scrollAction(){			
+			if(scrollT>portT-$("#port").height()/2){
+				$("#port h3, #cheese .imgBox").css({"opacity":"1"});	
+				$("#cheese .textBox h4, #cheese .textBox p").css({"transform":"translatex(0)","opacity":"1"});		
+			}
+			else{
+				$("#port h3, #cheese .imgBox").css({"opacity":"0"});
+				$("#cheese .textBox h4, #cheese .textBox p").css({"transform":"translatex(100%)","opacity":"0"});	
+			}
+
+			if(scrollT>aboutT-$("#about").height()*0.7){
+				$("#about_area h3, #about .textBox").css({"opacity":"1"});
 				$("#about .imgBox").css({"transform":"translatex(0)","opacity":"1"});
+			}
+			else{
+				$("#about_area h3, #about .textBox").css({"opacity":"0"});
+				$("#about .imgBox").css({"transform":"translatex(100%)","opacity":"0"});
 			}
 
 			if(scrollT>aboutT){
 				if($("#career dt.c2").next().attr("class").indexOf("s")==-1){
 					$("#career dt.c2").click();
 				}				
-			}
+			}			
 
-			if(scrollT>portT){
-				$("#cheese .textBox h4, #cheese .textBox p").css({"transform":"translatex(0)","opacity":"1"});		
-			}
-
-			if(scrollT>=contactT-$("#footer").height()*0.5){
+			if(scrollT>=contactT-$("#footer").height()/2){
 				$("#contact p").css({"transform":"translatex(0)","opacity":"1"});	
+			}
+			else{
+				$("#contact p").css({"transform":"translatex(100%)","opacity":"0"});
 			}
 		}
 
@@ -469,11 +496,11 @@
 					<a href="#" title="HOME">HOME</a>
 				</li>
 				<li>
-					<a href="#about_area" title="ABOUT">ABOUT</a>
-				</li>
-				<li>
 					<a href="#port" title="PORTFOLIO">PORTFOLIO</a>
 				</li>
+				<li>
+					<a href="#about_area" title="ABOUT">ABOUT</a>
+				</li>				
 				<li>
 					<a href="#contact" title="CONTACT">CONTACT</a>
 				</li>
@@ -489,11 +516,11 @@
 						<a href="#" title="HOME">HOME</a>
 					</li>
 					<li>
-						<a href="#about_area" title="ABOUT">ABOUT</a>
-					</li>
-					<li>
 						<a href="#port" title="PORTFOLIO">PORTFOLIO</a>
 					</li>
+					<li>
+						<a href="#about_area" title="ABOUT">ABOUT</a>
+					</li>					
 					<li>
 						<a href="#contact" title="CONTACT">CONTACT</a>
 					</li>
@@ -515,7 +542,33 @@
 						<a href="#none" title="ABOUT"><span>＾</span> Scroll more</a>
 					</p>
 				</div>
+				<div id="particle_wrap"></div>
 			</div>
+			<section id="port">
+				<h3>Portfolio</h3>
+				<div id="cheese">
+					<div class="imgBox">
+						<video autoplay muted loop>
+							<source src="vid/cheese_index.mp4" type="video/mp4"/>
+						</video>
+					</div>
+					<div class="textBox">
+						<h4>치즈퀸 리뉴얼 프로젝트</h4>
+						<p>
+							국내 치즈 쇼핑몰인 치즈퀸의 웹사이트를 리뉴얼해보았어요.<br/>
+							테이블코딩으로 구성된 기존의 홈페이지를 시멘틱태그를 이용해 웹표준에 맞게 마크업했습니다.
+						</p>
+						<p class="subText">
+							사용 스킬<br/>
+							HTML5 / CSS3 / javascript / jQuery / PHP / mySQL
+						</p>
+						<p class="btn">
+							<a href="http://escape1001.dothome.co.kr/cheesequeen/index.php" title="link" target="_blank">사이트 더 보기</a>
+							<a href="data/cheese_desc.pdf" title="기술상세서" target="_blank">기술상세서</a>
+						</p>
+					</div>
+				</div>
+			</section>
 			<section id="about_area">
 				<h2>about me</h2>
 				<div id="about">
@@ -640,32 +693,7 @@
 						</dl>
 					</div>
 				</div>
-			</section>
-			<section id="port">
-				<h3>Portfolio</h3>
-				<div id="cheese">
-					<div class="imgBox">
-						<video autoplay muted loop>
-							<source src="vid/cheese_index.mp4" type="video/mp4"/>
-						</video>
-					</div>
-					<div class="textBox">
-						<h4>치즈퀸 리뉴얼 프로젝트</h4>
-						<p>
-							국내 치즈 쇼핑몰인 치즈퀸의 웹사이트를 리뉴얼해보았어요.<br/>
-							테이블코딩으로 구성된 기존의 홈페이지를 시멘틱태그를 이용해 웹표준에 맞게 마크업했습니다.
-						</p>
-						<p class="subText">
-							사용 스킬<br/>
-							HTML5 / CSS3 / javascript / jQuery / PHP / mySQL
-						</p>
-						<p class="btn">
-							<a href="http://escape1001.dothome.co.kr/cheesequeen/index.php" title="link" target="_blank">사이트 더 보기</a>
-							<a href="data/cheese_desc.pdf" title="기술상세서" target="_blank">기술상세서</a>
-						</p>
-					</div>
-				</div>
-			</section>
+			</section>			
 		</div>
 		<footer id="footer">
 			<section id="contact_area">
