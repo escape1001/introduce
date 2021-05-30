@@ -40,7 +40,7 @@
 		text-align:center;
 		position:relative;
 	}
-	#greet .textBox{position:absolute; left:50%; top:50%; transform:translate(-50%,-60%); word-break:keep-all;  line-height:80px; z-index:1; opacity:0; transition:opacity 1.5s;}
+	#greet .textBox{position:absolute; left:50%; top:50%; transform:translate(-50%,-60%); word-break:keep-all;  line-height:80px; opacity:0; transition:opacity 1.5s;}
 	#greet .textBox .text{display:inline-block;
 		width:400px; height:50px; line-height:50px; font-size:30px; border:5px solid #314098; background-color:rgba(255,255,255,0.6);
 		/*border-image:linear-gradient(40deg, #c41cb7, #5673bc, #1217b1);
@@ -69,7 +69,7 @@
 		100%{transform:rotate(180deg) translatey(5px);}
 	}
 
-	#particle_wrap div{position:absolute; left:0; top:0;}
+	#particle_wrap div{position:absolute; left:0; top:0; mix-blend-mode:hard-light;}
 
 	#particle_wrap .particle{animation:particleani 1s infinite alternate;}
 	#particle_wrap div:nth-child(odd) .particle{animation-duration:1.3s;}
@@ -83,7 +83,7 @@
 	#about_area{width:100%; padding:100px 0; background-color:#f5f6f9;}
 	#about{width:1025px; margin:0 auto;}	
 	#about .textBox{width:40%; padding-top:80px;  padding-right:20%; font-size:14px; float:left; word-break:keep-all; opacity:0; transition:all 1s ease-out 0.2s;}
-	#about .textBox b{display:block; padding-bottom:20px; font-size:18px;}
+	#about .textBox b{display:block; padding-bottom:20px; font-size:24px;}
 	#about .imgBox{width:40%; height:400px; float:left; overflow:hidden; transform:translatex(100px); opacity:0; transition:all 1s ease-out 0.2s;}
 	#about .imgBox .film{width:400%; height:100%; animation:sw 25s infinite ease-in-out;}
 	@keyframes sw{
@@ -121,7 +121,7 @@
 	#study{padding-top:50px;}
 	#study p{width:100%; padding-bottom:10px;}
 	#study p b{display:inline-block; width:200px;}
-	#study p span{display:inline-block; width:520px;}
+	#study p span{display:inline-block; width:540px;}
 
 	#skill{padding-top:50px;}
 	#skill h3{border:none;}
@@ -130,6 +130,14 @@
 	#skill .desc dl:first-child{padding:0; padding-bottom:10px;}
 	#skill .desc dt{display:inline-block; margin-right:50px; background-color:#838ed5; color:#f5f6f9; padding:5px 10px; border-radius:20px;}
 	#skill .desc dd{display:inline-block; margin-right:30px;}
+
+	
+	#skill .web a[title=html]{animation:blink 0.7s infinite alternate;}
+	@keyframes blink{
+		0%{color:#000;}
+		100%{color:#f50;}
+	}
+
 	#skill .desc dd a:hover,#skill .desc dd a:focus{color:#fa0; outline:none;}
 
 	#skill .desc .last{width:90%; padding:10px 0; padding-left:15%; display:none; color:#324099; font-size:12px; word-break:keep-all;}
@@ -139,19 +147,38 @@
 	#skill:after{content:""; display:block; clear:both;}
 	#about_more_area:after{content:""; display:block; clear:both;}
 
+	#tooltip{display:none; position:absolute; left:0; top:0; z-index:10;}
+	#tooltip p:first-child{display:inline-block; color:#fff; padding:10px 15px; background-color:#5b66ad; border-radius:5px; font-size:13px; line-height:20px;}
+	#tooltip p:last-child{width:10px; height:10px; background-color:#5b66ad; transform:rotate(45deg); position:absolute; left:15px; bottom:-5px;}
+
 	/*####### port #######*/
 	#port{width:100%; padding:150px 0; overflow:hidden;}
 	#port h3{font-size:40px; text-indent:5%; padding-bottom:80px; text-transform:uppercase; opacity:0; transition:opacity 0.5s;}
 	#cheese{width:100%; height:500px;}
-	#cheese .imgBox{width:50%; height:100%; overflow:hidden; float:left; opacity:0; transition:opacity 0.5s;}
-	#cheese .imgBox video{width:100%;}
+	#cheese .imgBox{width:50%; height:100%; overflow:hidden; float:left; opacity:0; transition:opacity 0.5s; position:relative;}
+	#cheese .imgBox p{position:absolute; animation:float 3s infinite alternate;}
+	@keyframes float{
+		0%{transform:translateX(0%);}
+		100%{transform:translateX(5%);}
+	}
+	#cheese .imgBox p:nth-child(1){left:45%; top:15%;}
+	#cheese .imgBox p:nth-child(2){left:20%; top:5%;}
+	#cheese .imgBox p:nth-child(3){left:50%; top:50%;}
+	#cheese .imgBox p:nth-child(4){left:18%; top:60%;}
+
 	#cheese .textBox{width:45%; padding-left:5%; height:100%; float:left; text-align:left; word-break:keep-all;}
 	#cheese .textBox h4{font-size:24px; padding-bottom:20px; transform:translatex(10%); opacity:0; transition:all 0.5s;}
 	#cheese .textBox p{transform:translatex(10%); opacity:0; transition:all 0.5s ease-out 0.1s;}
 	#cheese .textBox .subText{color:#777; padding:20% 0 20px; transition-delay:0.2s;}
 	#cheese .textBox .btn{padding-top:20px; transition-delay:0.3s;}
 	#cheese .textBox .btn a{display:inline-block; width:150px; height:40px; line-height:40px; margin:0 20px; text-align:center; border-radius:20px; background-color:#838ed5; color:#fff; transition:background-color 0.4s;}
-	#cheese .textBox .btn a:hover,#cheese .textBox .btn a:focus{background-color:#324099; outline:none;}
+	#cheese .textBox .btn a[title=link]{animation:blinkBtn 1s infinite alternate;}
+	@keyframes blinkBtn{
+		0%{background-color:#838ed5;}
+		100%{background-color:#fa0;}
+	}
+	
+	#cheese .textBox .btn a:hover,#cheese .textBox .btn a:focus{background-color:#324099; outline:none; animation:none;}	
 
 	/*####### footer #######*/
 	#footer{width:100%; overflow:hidden;}
@@ -193,8 +220,11 @@
 
 		/*greet*/
 		#greet_area{height:600px;}
-		#greet .textBox{font-size:26px;}
+		#greet .textBox{font-size:26px; line-height:60px;}
 		#greet .textBox span{font-size:50px;}
+
+		#greet .textBox .text{width:300px; font-size:24px;}
+		
 
 		/*about*/
 		#about{width:90%; padding-bottom:240px; position:relative; overflow:hidden;}
@@ -210,9 +240,9 @@
 		#career dd i{display:block; padding-left:0;}
 
 		#study{padding-top:50px;}
-		#study p{width:100%; padding-bottom:24px; color:#838ed5;}
-		#study p b{display:block; width:100%; color:#000;}
-		#study p span{display:block; width:100%; padding:10px 0 5px; color:#000;}
+		#study p{width:100%; padding-bottom:24px; color:#838ed5; word-break:keep-all;}
+		#study p b{display:block; width:100%; color:#000; font-size:16px;}
+		#study p span{display:block; width:100%; padding:5px 0; color:#000;}
 
 		#skill .desc dt{display:block; width:100px; margin-right:0; margin-bottom:10px; padding:5px 0; text-align:center;}
 		#skill .desc dd{margin:0 10px 10px 10px;}
@@ -221,7 +251,13 @@
 		/*port*/
 		#port h3{font-size:30px; padding-bottom:50px;}
 		#cheese{height:auto;}
-		#cheese .imgBox{width:100%; height:auto; float:none;}
+		#cheese .imgBox{width:100%; height:300px; float:none;}		
+		#cheese .imgBox p img{transform:scale(0.5) translate(-50%,-50%);}
+		#cheese .imgBox p:nth-child(1){left:45%; top:15%;}
+		#cheese .imgBox p:nth-child(2){left:20%; top:5%;}
+		#cheese .imgBox p:nth-child(3){left:50%; top:50%;}
+		#cheese .imgBox p:nth-child(4){left:18%; top:60%;}
+
 		#cheese .textBox{width:90%; margin:0 auto; height:auto; float:none; padding:20px 0 0; text-align:center;}
 		#cheese .textBox .btn a{display:inline-block; width:150px; height:40px; line-height:40px; margin:0; margin-bottom:15px;}
 
@@ -447,31 +483,88 @@
 				$(this).next().removeClass("selected");
 			}
 		});
+		
+		/*스킬 클릭 설명글 - 아코디언 ver*/
+		function skillA(){
+			$("#skill .desc dd a").click(function(){
+				var here = $(this).parent().parent().index();
+				var detail = $(this).attr("href").substring(1);
+				//console.log(here);
 
-		/*스킬 클릭 설명글*/
-		$("#skill .desc dd a").click(function(){
-			var here = $(this).parent().parent().index();
-			var detail = $(this).attr("href").substring(1);
-			//console.log(here);
-			
-			$.ajax({
-				url:"data/skill.xml",
-				data:"get",
-				dataType:"xml",
-				success:function(data){
-					var list = $(data).find(detail).html();
-					//console.log(list);
+				$("#skill .desc dd a").css({"animation":"none"});
+				
+				$.ajax({
+					url:"data/skill.xml",
+					data:"get",
+					dataType:"xml",
+					success:function(data){
+						var list = $(data).find(detail).html();
+						//console.log(list);
 
-					$("#skill dl:eq("+here+") .last").html(list);
-				},error:function(){
-					alert("error!");
-				}
+						$("#skill dl:eq("+here+") .last").html(list);
+					},error:function(){
+						alert("error!");
+					}
+				});
+
+				$(this).parent().parent().find(".last").stop().slideDown();
 			});
-			
+		}		
 
-			$(this).parent().parent().find(".last").stop().slideDown();
-		});
-	});
+		/*스킬 클릭 설명글 - tooltip ver*/
+		function skillT(){
+			$("#skill .desc dd a").bind('mouseover focus',function(){
+				var here = $(this).parent().parent().index();
+				var detail = $(this).attr("href").substring(1);
+				console.log(here);
+				
+				$.ajax({
+					url:"data/skill.xml",
+					data:"get",
+					dataType:"xml",
+					success:function(data){
+						var list = $(data).find(detail).html();
+						//console.log(list);
+
+						$("#tooltip p:first-child").html(list);
+					},error:function(){
+						alert("error!");
+					}
+				});	
+				
+				$("#skill .desc dd a").css({"animation":"none"});
+				
+				if(here==2){
+					$("#tooltip p:last-child").css({"bottom":"auto","top":"-5px"});
+
+					$("#tooltip").css({"left":$(this).offset().left,"top":$(this).offset().top+$("#tooltip").height()}).stop().fadeIn();
+				}
+				else{
+					$("#tooltip p:last-child").css({"top":"auto","bottom":"-5px"});
+
+					$("#tooltip").css({"left":$(this).offset().left,"top":$(this).offset().top-$("#tooltip").height()}).stop().fadeIn();
+				}
+				
+			});
+
+			$("#skill .desc dd a").bind('mouseout blur', function(){
+				$("#tooltip").stop().fadeOut();
+
+				$("#skill .web a[title=html]").css({"animation":"blink 0.7s infinite alternate"});
+			})
+		}
+		
+		/* 스킬 설명글 - 너비따라 */
+		var winW = $(window).width();
+		//console.log("winW"+winW);
+
+		if(winW>1025){
+			skillT();
+		}
+		else{
+			skillA();
+		}
+	}); // jQuery
 
 	/*클립보드 복사*/
 		function copymail(mail){
@@ -548,18 +641,28 @@
 				<h3>Portfolio</h3>
 				<div id="cheese">
 					<div class="imgBox">
-						<video autoplay muted loop>
-							<source src="vid/cheese_index.mp4" type="video/mp4"/>
-						</video>
+						<p>
+							<img src="img/m0_pad.png" alt="이미지0"/>
+						</p>
+						<p>
+							<img src="img/m1_pc.png" alt="이미지1"/>
+						</p>
+						<p>
+							<img src="img/m2_pad.png" alt="이미지2"/>
+						</p>
+						<p>
+							<img src="img/m3_mob.png" alt="이미지3"/>
+						</p>
 					</div>
 					<div class="textBox">
 						<h4>치즈퀸 리뉴얼 프로젝트</h4>
 						<p>
 							국내 치즈 쇼핑몰인 치즈퀸의 웹사이트를 리뉴얼해보았어요.<br/>
-							테이블코딩으로 구성된 기존의 홈페이지를 시멘틱태그를 이용해 웹표준에 맞게 마크업했습니다.
+							테이블 코딩으로 구성된 기존의 홈페이지를 시멘틱 태그를 이용해 웹표준에 맞게 마크업했습니다.<br/>
+							페이지 디자인부터 마크업, 스크립트, PHP작업까지 100% 1인 제작 날코딩으로 작업했어요.
 						</p>
 						<p class="subText">
-							사용 스킬<br/>
+							<b>사용 스킬</b><br/>
 							HTML5 / CSS3 / javascript / jQuery / PHP / mySQL
 						</p>
 						<p class="btn">
@@ -576,7 +679,7 @@
 						<b>To Infinity and Beyond!</b>
 						영상디자인을 전공하고 대학로에서 9년간 프리랜서 영상 디자이너로 일했어요. 주로 중-소극장 공연의 SNS를 관리하고 영상 컨텐츠를 기획, 제작하며 객석과 무대 사이의 즐거움을 더했습니다.<br/><br/>
 
-						코로나19로 공연업계가 어려워지며 일이 점점 줄자 엎어진 김에 동전을 줍겠다는 각오로 웹개발로의 전향을 결심했습니다.<br/><br/>
+						영상 작업을 거듭할수록 재생과 멈춤 외에도 여러가지 선택지가 있는 작업을 하고 싶었고 팬데믹으로 세상이 멈춘 2019년, 엎어진 김에 동전을 줍겠다는 각오로 웹개발로의 전향을 결심했습니다.<br/><br/>
 
 						6개월간 결석 제로! 지각 제로! 100%의 꽉 찬 수강률로 성실성을 증명하며 학습을 이어나간 결과, 종강일에는 우수 학생으로 선정되었어요.<br/><br/>
 
@@ -652,13 +755,13 @@
 					<h3>교육사항</h3>
 					<div class="desc">
 						<p>
-							<b>2020 10월 ~ 2021 4월</b><span>그린컴퓨터 아카데미 UI/UX디자인 웹퍼블리셔&프론트엔드 개발자 양성과정</span>수료
+							<b>2020. 10 ~ 2021. 04</b><span>그린컴퓨터 아카데미 UI/UX디자인 웹퍼블리셔&프론트엔드 개발자 양성과정 (980H)</span>수료
 						</p>
 						<p>
-							<b>2011 ~ 2016</b><span>계원예술대학교 영상디자인과</span>졸업
+							<b>2011. 03 ~ 2016. 02</b><span>계원예술대학교 영상디자인과</span>졸업
 						</p>
 						<p>
-							<b>2008 ~ 2010</b><span>서울영상고등학교 애니메이션과</span>중퇴
+							<b>2008. 03 ~ 2010. 02</b><span>서울영상고등학교 애니메이션과</span>중퇴
 						</p>
 					</div>
 				</div>
@@ -691,6 +794,10 @@
 							<dd><a href="#powerpoint" title="powerpoint">Power Point</a></dd>
 							<dd class="last">* 상세설명 어쩌구</dd>
 						</dl>
+					</div>
+					<div id="tooltip">
+						<p>test</p>
+						<p></p>
 					</div>
 				</div>
 			</section>			
